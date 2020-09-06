@@ -1,18 +1,9 @@
 import mysql.connector
 
 
-mydb = mysql.connector.connect(
+db = mysql.connector.connect(
   host="localhost",
   user="root",
-  password="",
-  database="proyect_zero"
+  password="clave1234",
+  database="the_hashing_python"
 )
-
-mycursor = mydb.cursor()
-
-mycursor.execute("SELECT * FROM producto")
-
-myresult = mycursor.fetchall()
-
-for x in myresult:
-  print(x)
