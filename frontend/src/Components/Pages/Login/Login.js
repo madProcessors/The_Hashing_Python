@@ -8,7 +8,7 @@ const Login = () => {
 
   const handleSubmit = (e)=>{
     e.preventDefault();
-    console.log("Email: " , email , "password " , hashPassword);
+    console.log("Email: " , email , "password " , password);
   }
 
   return (
