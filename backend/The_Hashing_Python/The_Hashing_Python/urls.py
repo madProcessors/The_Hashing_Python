@@ -22,6 +22,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
+
 router = routers.DefaultRouter()
 router.register(r'users', views.UserView)
 router.register(r'hash', views.HashView)
@@ -33,4 +34,5 @@ urlpatterns = [
     path('api/hash/create', views.HashCreationView.as_view(), name='createHash'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('', include('accountsauth.urls'))
 ]
