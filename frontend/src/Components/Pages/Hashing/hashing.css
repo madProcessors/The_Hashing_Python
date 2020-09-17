@@ -1,0 +1,73 @@
+.hashForm {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30%;
+    padding: 20px;
+    text-align: center;
+}
+
+.hashForm button {
+    margin-top: 20px;
+}
+
+.hashForm input {
+   text-align: center;
+}
+
+@media only screen and (max-width: 490px) {
+    .hashForm {
+        width: auto;
+        padding: 0;
+    }
+}
+
+.hash-card-container {
+    margin: 0 auto;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translate(0, -50%);
+    /* width: 100%; */
+}
+
+.hash-card-header {
+    background-color: rgba(108, 230, 24, 0.3) !important;
+}
+
+.hash-card-body {
+    font-weight: bold;
+}
+
+.hash-card {
+    width: 400px;
+    -webkit-box-shadow: -10px 11px 5px -7px rgba(0,0,0,0.32);
+    -moz-box-shadow: -10px 11px 5px -7px rgba(0,0,0,0.32);
+    box-shadow: -10px 11px 5px -7px rgba(0,0,0,0.32);
+}
+
+.infoLabel-container {
+    display: flex;
+    justify-content: center;
+    height: 200px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hashTable-container {
+    display: flex;
+    padding-top: 100px !important;
+    flex-direction: column;
+    left: 0;
+    top: 0;
+    position: absolute;
+    width: 30%;
+    padding: 15px;
+    height: 100%;
+    z-index: -1;
+}
+
+.hashTable {
+    font-size: 0.7em;
+}
