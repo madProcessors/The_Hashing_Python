@@ -4,7 +4,7 @@ const Footer = ()=>{
     return(
         <div className="footerHash">
         <footer>
-            Footer
+        <p>All rights reserved &#169; MadProcessors</p>
         </footer>
         </div>
     )

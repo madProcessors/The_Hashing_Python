@@ -5,6 +5,7 @@ import "./login.css";
 const Login = ({history}) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  
 
   const handleSubmit = async(e) => {
     e.preventDefault();
@@ -50,6 +51,7 @@ const Login = ({history}) => {
 
   return (
     <Container>
+      {console.log("en el rturn " , localStorage.getItem("token_refresh"))}
       <div className="loginForm">
         <Form onSubmit={handleSubmit}>
           <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
@@ -77,7 +79,7 @@ const Login = ({history}) => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </FormGroup>
-          <Button>Submit</Button>
+          <Button className="btn-submit">LOG IN</Button>
         </Form>
       </div>
     </Container>
