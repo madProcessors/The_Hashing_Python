@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Container, Button, Form, FormGroup,
-    Label, Input, Table, Card, CardBody, CardHeader
+    Input, Table, Card, CardBody, CardHeader
 } from "reactstrap";
 import './hashing.css';
 import TheLoader from '../../Layout/TheLoader/TheLoader';
 import getCookie from '../../../Logic/Cookie';
+import jwt_decode from "jwt-decode";
 
 const Hashing = () => {
     const [text, setText] = useState('');
@@ -13,10 +14,74 @@ const Hashing = () => {
     const [showHash, setShowHash] = useState(false);
     const [loader, setLoader] = useState(false);
     const [tableRows, setTableRows] = useState([]);
+    const [authorized, setAuthorized] = useState(false);
+
+    // To hide generated hash card
+    document.addEventListener("mouseup", (e) => 
+    {
+        if(e.target.className != 'hash-card-body card-body'){
+            setShowHash(false);
+        }
+    });
+
+    // Check JWT validness
+    const checkJwt = () => {
+        try {
+            const token = localStorage.getItem('token_access');
+
+            if (token === null) {
+                setAuthorized(false);
+            }
+
+            var decodedToken = jwt_decode(token, { complete: true });
+            var dateNow = Date.now() / 1000;
+
+            if (decodedToken.exp < dateNow) {
+                setAuthorized(false);
+            }
+            else {
+                setAuthorized(true);
+            }
+        }
+        catch (e) {
+            console.log('error: ', e);
+            window.localStorage.clear();
+            window.location.href = '/';
+        }
+    }
+
+    const getHashes = () => {
+        checkJwt();
+        fetch('http://localhost:8000/api/hash', {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Authorization': 'Bearer ' + localStorage.getItem('token_access')
+            }
+        })
+            .then(response => response.json())
+            .then(response => {
+                if (Array.isArray(response)) {
+                    setTableRows(response);
+                }
+            })
+            .catch(error => console.log(error));
+    }
+
+    useEffect(() => getHashes(), []);
 
     /*Asks server for hashing process*/
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        // is authorized?
+        if (!authorized) {
+            alert('You session has ended. Please, login again.');
+            window.location.href = '/';
+            return;
+        }
 
         // Validate
         const inputText = text.trim();
@@ -31,29 +96,22 @@ const Hashing = () => {
             text
         }
 
-        const token = '12345';
-        let responseData;
-        // console.log(`data a enviar:`, data);
-
-
         fetch('http://localhost:8000/api/hash/create', {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json; charset=UTF-8',
                 'X-CSRFToken': getCookie('csrftoken'),
-                'Token': token,
+                'Authorization': 'Bearer ' + localStorage.getItem('token_access')
             },
             body: JSON.stringify(data)
         })
             .then(response => response.json())
             .then(data => {
                 setLoader(false);
-                console.log(`data:`, data);
                 setHash(data.hash);
                 setShowHash(true);
             })
             .catch(error => {
-                console.log(`error: ${error}`);
                 setLoader(false);
                 alert('Couldn\'t build your hash :(. Please, try again later');
             });
@@ -79,17 +137,17 @@ const Hashing = () => {
                 </FormGroup>
                 <Button>HASH IT!</Button>
             </Form>
-            <div className='hash-card-container' style={{ display: (showHash ? 'block' : 'none')}}>
+            <div className='hash-card-container' style={{ display: (showHash ? 'block' : 'none') }}>
                 <Card className='hash-card'>
                     <CardHeader className='hash-card-header'>This is your hash...</CardHeader>
                     <CardBody className='hash-card-body'>{hash}</CardBody>
                 </Card>
             </div>
-            
+
             <div className='infoLabel-container'>
-                {tableRows.length === 0 && <h5>You don't have any hashes yet</h5> }
+                {tableRows.length === 0 && <h5>You don't have any hashes yet</h5>}
             </div>
-            
+
             <div className='hashTable-container'>
                 <Table className='hashTable'>
                     <thead>
@@ -102,7 +160,7 @@ const Hashing = () => {
                     <tbody>
                         {tableRows.map((row, i) => {
                             return (
-                                <tr>
+                                <tr key={i}>
                                     <td>
                                         {i}
                                     </td>
