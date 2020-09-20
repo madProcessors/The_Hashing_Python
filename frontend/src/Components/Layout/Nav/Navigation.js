@@ -1,7 +1,8 @@
-import React,{useState} from "react";
+import React,{useEffect, useState} from "react";
 import {
   Collapse,
   Navbar,
+  NavLink,
   NavbarToggler,
   NavbarBrand,
   NavbarText,
@@ -12,7 +13,12 @@ const Navigation = () => {
   
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
-  
+
+  const logout = () => {
+    window.localStorage.clear();
+    window.location.href = '/';
+  }
+
   return (
     <div>
       <Navbar color="light" light expand="md">
@@ -21,6 +27,9 @@ const Navigation = () => {
         <Collapse isOpen={isOpen} navbar>
           <NavbarText className="navText">MadProcessors</NavbarText>
         </Collapse>
+        <NavLink className='logout' onClick={logout} > 
+          Logout
+        </NavLink>
       </Navbar>
     </div>
   );

@@ -1,3 +1,13 @@
 .navText{
     float:right;
 }
+
+.logout {
+    float: right;
+    cursor: pointer;
+    color: #000;
+}
+
+.logout:hover {
+    color: #5a6268;
+}
